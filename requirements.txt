@@ -1,2 +1,7 @@
 Flask
 Flask-Session
+psycopg2
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Script
+gunicorn
