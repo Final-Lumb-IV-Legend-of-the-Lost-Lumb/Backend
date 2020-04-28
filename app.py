@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Users
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 
@@ -18,6 +17,8 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bc = Bcrypt(app)
 db = SQLAlchemy(app)
+
+from models import Users
 
 @app.route('/')
 def home():
