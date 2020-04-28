@@ -36,7 +36,7 @@ def home():
 @jwt_required
 def protected():
     flash('Yay you are authenticated!')
-    return
+    return redirect(url_for('home'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
