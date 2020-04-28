@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 Session = sessionmaker()
 engine = create_engine(app.config.from_object(os.environ['DATABASE_URL']))
 Session.configure(bind=engine)
+session = Session()
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -84,13 +85,17 @@ def register():
             error = 'Username in use. Please choose another.'
             return redirect(url_for('register'))
 
-        db.execute("INSERT INTO users (username, password) VALUES(:username, :password)", {"username": request.form.get("username"), "password": bc.generate_password_hash(request.form.get('password'))}).decode('utf-8')
+        user = User('username', 'password')
+        session.add(user)
+        session.commit()
 
-        newRows = db.execute("SELECT * FROM users WHERE username = :username", {"username": request.form.get('username')}).fetchall()
+        #original code
+        # db.execute("INSERT INTO users (username, password) VALUES(:username, :password)", {"username": request.form.get("username"), "password": bc.generate_password_hash(request.form.get('password'))}).decode('utf-8')
+        # newRows = db.execute("SELECT * FROM users WHERE username = :username", {"username": request.form.get('username')}).fetchall()
+        # session['user_id'] = newRows[0]['username']
+        # db.commit()
 
-        session['user_id'] = newRows[0]['username']
-
-        db.commit()
+        
         flash('Registered')
         return redirect(url_for("home"))
     
