@@ -1,6 +1,8 @@
 from app import db
 from sqlalchemy.dialects.postgresql import JSON
 
+
+
 class Users(db.Model):
     __tablename__ = 'users'
 
