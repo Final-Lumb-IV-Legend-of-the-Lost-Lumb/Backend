@@ -33,7 +33,7 @@ def home():
     return render_template('home.html')
 
 @app.route('/protected')
-@jwt_required()
+@jwt_required
 def protected():
     flash('Yay you are authenticated!')
     return
