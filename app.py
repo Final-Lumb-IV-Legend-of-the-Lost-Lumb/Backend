@@ -89,6 +89,7 @@ def register():
         #     return redirect(url_for('register'))
 
         user = Users(username, password)
+        #fml
         db_session.add(user)
         db_session.commit()
 
