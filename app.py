@@ -4,6 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from models import Users
+from flask_jwt import JWT, jwt_required, current_identity
+from werkzeug.security import safe_str_cmp
 
 Session = sessionmaker()
 engine = create_engine(os.environ['DATABASE_URL'])
@@ -13,14 +16,17 @@ db_session = Session()
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 bc = Bcrypt(app)
-
-from models import Users
 
 @app.route('/')
 def home():
     return render_template('home.html')
+
+@app.route('/protected')
+@jwt_required()
+def protected():
+    flash('Yay you are authenticated!')
+    return
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -38,19 +44,28 @@ def login():
         elif not request.form.get('password'):
             return 'Must provide a password.'
 
-        # rows = db.execute("SELECT * FROM users WHERE username = :user", {"user": request.form.get('username')}).fetchall()
-
         registered_user = Users.query.filter_by(username=username).first()
-        print(registered_user.username)
 
         # Possibly use .decode('utf-8')
         if not registered_user or not bc.check_password_hash( registered_user.password, password):
             flash('Invalid username and/or password.')
             return redirect(url_for('login'))
 
+        @jwt.authentication_handler
+        def authenticate(username, password):
+            user = Users.query.filter(Users.username == username).scalar()
+            if bc.check_password_hash(user.password, password):
+                return user
+                
+        @jwt.identity_handler
+        def identify(payload):
+            return Users.query.filter(Users.id == payload['identity']).scalar()
+
+        token = JWT(app, authenticate, identify)
         session['user_id'] = registered_user.username
 
         flash('Logged In!')
+        print(token)
         return redirect(url_for('home'))
 
     else:
@@ -89,24 +104,12 @@ def register():
             error = "Passwords don't match"
             return redirect(url_for('register'))
 
-        # rows = db.execute("SELECT * FROM users WHERE username = :user", {"user": request.form.get('username')}).first()
-
-        # if rows:
-        #     error = 'Username in use. Please choose another.'
-        #     return redirect(url_for('register'))
-
         user = Users(username, bc.generate_password_hash(password).decode('utf-8'))
-        #fml
         db_session.add(user)
         db_session.commit()
 
-        #original code
-        # db.execute("INSERT INTO users (username, password) VALUES(:username, :password)", {"username": request.form.get("username"), "password": bc.generate_password_hash(request.form.get('password'))}).decode('utf-8')
-        # newRows = db.execute("SELECT * FROM users WHERE username = :username", {"username": request.form.get('username')}).fetchall()
         session['user_id'] = username
-        # db.commit()
 
-        
         flash('Registered')
         return redirect(url_for("home"))
     

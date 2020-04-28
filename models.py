@@ -16,3 +16,6 @@ class Users(db.Model):
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
+
+    def __str__(self):
+        return "User(id='%s')" % self.id
