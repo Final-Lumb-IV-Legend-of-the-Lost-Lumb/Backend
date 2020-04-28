@@ -44,7 +44,7 @@ def login():
         print(registered_user.username)
 
         # Possibly use .decode('utf-8')
-        if not registered_user or not bc.check_password_hash(request.form.get('password'), registered_user.password):
+        if not registered_user or not bc.check_password_hash( registered_user.password, password):
             flash('Invalid username and/or password.')
             return redirect(url_for('login'))
 
@@ -95,7 +95,7 @@ def register():
         #     error = 'Username in use. Please choose another.'
         #     return redirect(url_for('register'))
 
-        user = Users(username, bc.generate_password_hash(password).encode('utf-8'))
+        user = Users(username, bc.generate_password_hash(password).decode('utf-8'))
         #fml
         db_session.add(user)
         db_session.commit()
