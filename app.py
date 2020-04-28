@@ -85,7 +85,7 @@ def register():
         #     error = 'Username in use. Please choose another.'
         #     return redirect(url_for('register'))
 
-        user = User('username', 'password')
+        user = Users('username', 'password')
         session.add(user)
         session.commit()
 
