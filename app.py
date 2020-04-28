@@ -43,11 +43,11 @@ def login():
         registered_user = Users.query.filter_by(username=username).first()
         print(registered_user.username)
 
-        # if not registered_user or not bc.check_password_hash(request.form.get('password'), registered_user['password']):
-        #     flash('Invalid username and/or password.')
-        #     return redirect(url_for('login'))
+        if not registered_user or not bc.check_password_hash(request.form.get('password'), registered_user['password']):
+            flash('Invalid username and/or password.')
+            return redirect(url_for('login'))
 
-        session['user_id'] = registered_user['username']
+        session['user_id'] = registered_user.username
 
         flash('Logged In!')
         return redirect(url_for('home'))
