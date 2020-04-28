@@ -29,19 +29,24 @@ def login():
 
     if request.method == 'POST':
 
+        username = request.form.get('username')
+        password = request.form.get('password')
+
         if not request.form.get('username'):
             return 'Must provide a username.'
 
         elif not request.form.get('password'):
             return 'Must provide a password.'
 
-        rows = db.execute("SELECT * FROM users WHERE username = :user", {"user": request.form.get('username')}).fetchall()
+        # rows = db.execute("SELECT * FROM users WHERE username = :user", {"user": request.form.get('username')}).fetchall()
 
-        if not rows or not bc.check_password_hash(request.form.get('password'), rows[0]['password']):
+        registered_user = Users.query.filter_by(username=username,password=password).first()
+
+        if not registered_user or not bc.check_password_hash(request.form.get('password'), registered_user['password']):
             flash('Invalid username and/or password.')
             return redirect(url_for('login'))
 
-        session['user_id'] = rows[0]['username']
+        session['user_id'] = registered_user['username']
 
         flash('Logged In!')
         return redirect(url_for('home'))
