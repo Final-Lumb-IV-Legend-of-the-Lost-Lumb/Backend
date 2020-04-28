@@ -94,7 +94,7 @@ def register():
         #     error = 'Username in use. Please choose another.'
         #     return redirect(url_for('register'))
 
-        user = Users(username, password)
+        user = Users(username, bc.generate_password_hash(password))
         #fml
         db_session.add(user)
         db_session.commit()
