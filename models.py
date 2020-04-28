@@ -1,4 +1,4 @@
-from app import db_session
+from app import db
 from sqlalchemy.dialects.postgresql import JSON
 
 
@@ -6,9 +6,9 @@ from sqlalchemy.dialects.postgresql import JSON
 class Users(db.Model):
     __tablename__ = 'users'
 
-    id = db_session.Column(db_session.Integer, primary_key=True)
-    username = db_session.Column(db_session.String())
-    password = db_session.Column(db_session.String())
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String())
+    password = db.Column(db.String())
 
     def __init__(self, username, password):
         self.username = username
