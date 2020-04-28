@@ -41,10 +41,11 @@ def login():
         # rows = db.execute("SELECT * FROM users WHERE username = :user", {"user": request.form.get('username')}).fetchall()
 
         registered_user = Users.query.filter_by(username=username).first()
+        print(registered_user)
 
-        if not registered_user or not bc.check_password_hash(request.form.get('password'), registered_user['password']):
-            flash('Invalid username and/or password.')
-            return redirect(url_for('login'))
+        # if not registered_user or not bc.check_password_hash(request.form.get('password'), registered_user['password']):
+        #     flash('Invalid username and/or password.')
+        #     return redirect(url_for('login'))
 
         session['user_id'] = registered_user['username']
 
