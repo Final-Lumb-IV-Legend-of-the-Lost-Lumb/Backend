@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 Session = sessionmaker()
 engine = create_engine(os.environ['DATABASE_URL'])
 Session.configure(bind=engine)
-session = Session()
+db_session = Session()
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -25,7 +25,7 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
-    # session.clear()
+    session.clear()
 
     if request.method == 'POST':
 
@@ -63,9 +63,12 @@ def logout():
 def register():
     error = None
 
-    # session.clear()
+    session.clear()
 
     if request.method == 'POST':
+
+        username = request.form.get('username')
+        password = request.form.get('password')
 
         if not request.form.get('username'):
             flash('Must provide a username.')
@@ -85,14 +88,15 @@ def register():
         #     error = 'Username in use. Please choose another.'
         #     return redirect(url_for('register'))
 
-        user = Users('username', 'password')
-        session.add(user)
-        session.commit()
+        user = Users(username, password)
+        #fml
+        db_session.add(user)
+        db_session.commit()
 
         #original code
         # db.execute("INSERT INTO users (username, password) VALUES(:username, :password)", {"username": request.form.get("username"), "password": bc.generate_password_hash(request.form.get('password'))}).decode('utf-8')
         # newRows = db.execute("SELECT * FROM users WHERE username = :username", {"username": request.form.get('username')}).fetchall()
-        # session['user_id'] = newRows[0]['username']
+        session['user_id'] = username
         # db.commit()
 
         
