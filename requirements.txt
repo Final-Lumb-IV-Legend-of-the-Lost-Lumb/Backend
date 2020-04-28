@@ -7,4 +7,4 @@ Flask-Script
 gunicorn
 autoenv
 flask-bcrypt
-Flask-JWT
+flask-jwt-extended

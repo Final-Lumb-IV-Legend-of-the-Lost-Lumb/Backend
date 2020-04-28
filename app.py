@@ -4,8 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from flask_jwt import JWT, jwt_required, current_identity
-from werkzeug.security import safe_str_cmp
+from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt, JWTManager)
 
 Session = sessionmaker()
 engine = create_engine(os.environ['DATABASE_URL'])
@@ -17,8 +16,17 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bc = Bcrypt(app)
 db = SQLAlchemy(app)
+app.config['JWT_SECRET_KEY'] = 'is-it-secret-is-it-safe'
+app.config['JWT_BLACKLIST_ENABLED'] = True
+app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
+jwt = JWTManager(app)
 
-from models import Users
+from models import Users, RevokedTokenModel
+
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    jti = decrypted_token['jti']
+    return Users.RevokedTokenModel.is_jti_blacklisted(jti)
 
 @app.route('/')
 def home():
@@ -53,35 +61,50 @@ def login():
             flash('Invalid username and/or password.')
             return redirect(url_for('login'))
 
-        @jwt.authentication_handler
-        def authenticate(username, password):
-            user = Users.query.filter(Users.username == username).scalar()
-            if bc.check_password_hash(user.password, password):
-                return user
-                
-        @jwt.identity_handler
-        def identify(payload):
-            return Users.query.filter(Users.id == payload['identity']).scalar()
+        try:
+            access_token = create_access_token(identity=username)
+            refresh_token = create_refresh_token(identity=username)
 
-        token = JWT(app, authenticate, identify)
-        session['user_id'] = registered_user.username
+            session['user_id'] = registered_user.username
 
-        flash('Logged In!')
-        print(token)
-        return redirect(url_for('home'))
+            flash('Logged In!')
+            return {
+                'message': 'Logged in as {}'.format(username),
+                'access_token': access_token,
+                'refresh_token': refresh_token
+            }
+        except:
+            return {'message': 'Something went wrong'}, 500
 
     else:
         return render_template('login.html')
 
 @app.route("/logout")
+@jwt_required
 def logout():
     """Log user out."""
 
     # forget any user_id
     session.clear()
 
-    # redirect user to login form
-    return redirect(url_for("login"))
+    jti = get_raw_jwt()['jti']
+    try:
+        revoked_token = RevokedTokenModel(jti = jti)
+        revoked_token.add()
+        return {'message': 'Access token has been revoked.'}
+    except:
+        return {'message': 'Something went wrong.'}, 500
+
+@app.route("/logout/refresh")
+@jwt_refresh_token_required
+def logout_refresh():
+    jti = get_raw_jwt()['jti']
+    try:
+        revoked_token = RevokedTokenModel(jti = jti)
+        revoked_token.add()
+        return {'message': 'Refresh token has been revoked.'}
+    except:
+        return {'message': 'Something went wrong.'}, 500
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -110,10 +133,20 @@ def register():
         db_session.add(user)
         db_session.commit()
 
-        session['user_id'] = username
+        try:
+            access_token = create_access_token(identity=username)
+            refresh_token = create_refresh_token(identity=username)
 
-        flash('Registered')
-        return redirect(url_for("home"))
+            session['user_id'] = username
+
+            flash('Registered and Logged In!')
+            return {
+                'message': 'Logged in as {}'.format(username),
+                'access_token': access_token,
+                'refresh_token': refresh_token
+            }
+        except:
+            return {'message': 'Something went wrong'}, 500
     
     else:
         return render_template('register.html')
