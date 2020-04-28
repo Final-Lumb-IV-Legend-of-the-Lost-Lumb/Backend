@@ -79,11 +79,11 @@ def register():
             error = "Passwords don't match"
             return redirect(url_for('register'))
 
-        rows = db.execute("SELECT * FROM users WHERE username = :user", {"user": request.form.get('username')}).first()
+        # rows = db.execute("SELECT * FROM users WHERE username = :user", {"user": request.form.get('username')}).first()
 
-        if rows:
-            error = 'Username in use. Please choose another.'
-            return redirect(url_for('register'))
+        # if rows:
+        #     error = 'Username in use. Please choose another.'
+        #     return redirect(url_for('register'))
 
         user = User('username', 'password')
         session.add(user)
