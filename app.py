@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 Session = sessionmaker()
-engine = create_engine(app.config.from_object(os.environ['DATABASE_URL']))
+engine = create_engine(os.environ['DATABASE_URL'])
 Session.configure(bind=engine)
 session = Session()
 
