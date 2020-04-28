@@ -6,3 +6,4 @@ Flask-Migrate
 Flask-Script
 gunicorn
 autoenv
+flask-bcrypt
