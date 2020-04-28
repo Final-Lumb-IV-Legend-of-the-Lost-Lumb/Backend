@@ -52,7 +52,7 @@ def logout():
     # redirect user to login form
     return redirect(url_for("login"))
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     error = None
 
@@ -87,6 +87,9 @@ def register():
         db.commit()
         flash('Registered')
         return redirect(url_for("home"))
+    
+    else:
+        return render_template('register.html')
 
 if __name__ == "__main__":
     app.run()
