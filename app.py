@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, session, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
-from flask.ext.bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
