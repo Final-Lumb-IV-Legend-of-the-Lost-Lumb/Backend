@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, session, redirect, url_for, flash, request
+from flask import Flask, render_template, session, redirect, url_for, flash, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from sqlalchemy import create_engine
@@ -68,13 +68,13 @@ def login():
             session['user_id'] = registered_user.username
 
             flash('Logged In!')
-            return {
+            return jsonify({
                 'message': 'Logged in as {}'.format(username),
                 'access_token': access_token,
                 'refresh_token': refresh_token
-            }
+            })
         except:
-            return {'message': 'Something went wrong'}, 500
+            return jsonify({'message': 'Something went wrong'}), 500
 
     else:
         return render_template('login.html')
@@ -91,9 +91,9 @@ def logout():
     try:
         revoked_token = RevokedTokenModel(jti = jti)
         revoked_token.add()
-        return {'message': 'Access token has been revoked.'}
+        return jsonify({'message': 'Access token has been revoked.'})
     except:
-        return {'message': 'Something went wrong.'}, 500
+        return jsonify({'message': 'Something went wrong.'}), 500
 
 @app.route("/logout/refresh")
 @jwt_refresh_token_required
@@ -102,9 +102,9 @@ def logout_refresh():
     try:
         revoked_token = RevokedTokenModel(jti = jti)
         revoked_token.add()
-        return {'message': 'Refresh token has been revoked.'}
+        return jsonify({'message': 'Refresh token has been revoked.'})
     except:
-        return {'message': 'Something went wrong.'}, 500
+        return jsonify({'message': 'Something went wrong.'}), 500
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -140,13 +140,13 @@ def register():
             session['user_id'] = username
 
             flash('Registered and Logged In!')
-            return {
+            return jsonify({
                 'message': 'Logged in as {}'.format(username),
                 'access_token': access_token,
                 'refresh_token': refresh_token
-            }
+            })
         except:
-            return {'message': 'Something went wrong'}, 500
+            return jsonify({'message': 'Something went wrong'}), 500
     
     else:
         return render_template('register.html')
