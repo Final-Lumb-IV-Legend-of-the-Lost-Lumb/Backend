@@ -67,7 +67,7 @@ def login():
             session['user_id'] = registered_user.username
 
             flash('Logged In!')
-            return render_template('lobby', access_token=access_token, refresh_token=refresh_token)
+            return render_template('lobby.html', access_token=access_token, refresh_token=refresh_token)
         except:
             return jsonify({'message': 'Something went wrong'}), 500
 
@@ -135,7 +135,7 @@ def register():
             session['user_id'] = username
 
             flash('Registered and Logged In!')
-            return render_template('lobby', access_token=access_token, refresh_token=refresh_token)
+            return render_template('lobby.html', access_token=access_token, refresh_token=refresh_token)
         except:
             return jsonify({'message': 'Something went wrong'}), 500
     
