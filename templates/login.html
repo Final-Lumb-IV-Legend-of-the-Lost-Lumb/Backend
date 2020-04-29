@@ -9,31 +9,27 @@
   />
   <h1 class="text">The Tiger King Chronicles</h1>
 </div>
-<form action="{{ url_for('login') }}" method="post">
-  <div class="form-group">
-    <label class="labels">Username</label>
-    <input
-      autocomplete="off"
-      autofocus
-      class="login-control"
-      name="username"
-      placeholder="Username"
-      type="text"
-    />
+<div class="rtPan">
+    <form class="login" action="{{ url_for('login') }}" method="post" >
+        <div class="form-group">
+            <h2>Sign In</h2>
+            <label class="labels">Username</label>
+            </br>
+            <input autocomplete="off" autofocus class="login-control" name="username" placeholder="Username"
+                type="text" />
+        </div>
+        <div class="form-group">
+            <label class="labels">Password</label>
+            </br>
+            <input class="login-control" name="password" placeholder="Password" type="password" />
+        </div>
+        <div>
+            <button class="login-btn" type="submit" onclick="addItem()">Log In</button>
+          </br>
+          <a href="register" >register</a>    
+        </div>
+    </form>
   </div>
-  <div class="form-group">
-    <label class="labels">Password</label>
-    <input
-      class="login-control"
-      name="password"
-      placeholder="Password"
-      type="password"
-    />
-  </div>
-  <div class="form-group">
-    <button class="login-btn" type="submit" onclick="addItem">Log In</button>
-  </div>
-</form>
 <script>
   function addItem(e) {
     if (e.which == 13 || e.keyCode == 13) {
