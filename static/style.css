@@ -1,0 +1,121 @@
+body {
+  background: #fc9230;
+}
+.main {
+  display: flex;
+}
+nav {
+  background: #e46e00;
+}
+nav a {
+  background: #656565;
+  border-radius: 10px;
+  font-family: Russo One;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 29px;
+  color: #ffffff;
+}
+.logo {
+  position: absolute;
+  width: 422px;
+  height: 96px;
+  font-family: Russo One;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 48px;
+  line-height: 58px;
+  text-align: center;
+  color: #000000;
+  border: 3px solid #fffcfc;
+}
+.login {
+  text-align: center;
+  padding-left: 2%;
+  padding-right: 2%;
+  font-family: Russo One;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 29px;
+  background: #ffc48d;
+  border-radius: 10px;
+}
+.login-btn {
+  margin: 0 auto;
+  border: none;
+  margin-top: 45px;
+  width: 154px;
+  height: 40px;
+  font-family: Russo One;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 29px;
+  color: #ffffff;
+  background: #3592e8;
+  border-radius: 10px;
+}
+.labels {
+  text-align: left;
+  font-family: "Russo One", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 29px;
+  color: black;
+}
+.form-control {
+  padding: 1%;
+  width: 255px;
+  height: 25px;
+  border: none;
+  background: #e8e8e8;
+  border-radius: 10px;
+}
+.tiger {
+  margin: auto 0;
+  width: 313.57px;
+  height: 376.61px;
+}
+
+.ltPan {
+  position: absolute;
+  width: 469px;
+  height: 379px;
+  left: 50px;
+  top: 98px;
+}
+.tigerImg {
+  position: absolute;
+  width: 316px;
+  height: 379px;
+  left: 127px;
+  top: 98px;
+}
+.text {
+  position: absolute;
+  width: 469px;
+  height: 154px;
+  left: 50px;
+  top: 211px;
+  font-family: Russo One;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 64px;
+  line-height: 77px;
+  text-align: center;
+  color: #000000;
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: White;
+}
+.rtPan {
+  position: absolute;
+  width: 316px;
+  height: 380px;
+  left: 950px;
+  top: 200px;
+  background: #ffc48d;
+  border-radius: 10px;
+}
