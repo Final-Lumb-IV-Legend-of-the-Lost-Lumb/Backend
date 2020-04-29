@@ -1,10 +1,10 @@
 import os
-from flask import Flask, render_template, session, redirect, url_for, flash, request
+from flask import Flask, render_template, session, redirect, url_for, flash, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from flask_bootstrap import Bootstrap
+from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt, JWTManager)
 
 Session = sessionmaker()
 engine = create_engine(os.environ['DATABASE_URL'])
@@ -14,14 +14,29 @@ db_session = Session()
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 bc = Bcrypt(app)
+db = SQLAlchemy(app)
+app.config['JWT_SECRET_KEY'] = 'is-it-secret-is-it-safe'
+app.config['JWT_BLACKLIST_ENABLED'] = True
+app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
+jwt = JWTManager(app)
 
-from models import Users
+from models import Users, RevokedTokenModel
+
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    jti = decrypted_token['jti']
+    return RevokedTokenModel.is_jti_blacklisted(jti)
 
 @app.route('/')
 def home():
     return render_template('home.html')
+
+@app.route('/protected')
+@jwt_required
+def protected():
+    flash('Yay you are authenticated!')
+    return redirect(url_for('home'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -30,35 +45,66 @@ def login():
 
     if request.method == 'POST':
 
+        username = request.form.get('username')
+        password = request.form.get('password')
+
         if not request.form.get('username'):
             return 'Must provide a username.'
 
         elif not request.form.get('password'):
             return 'Must provide a password.'
 
-        rows = db.execute("SELECT * FROM users WHERE username = :user", {"user": request.form.get('username')}).fetchall()
+        registered_user = Users.query.filter_by(username=username).first()
 
-        if not rows or not bc.check_password_hash(request.form.get('password'), rows[0]['password']):
+        # Possibly use .decode('utf-8')
+        if not registered_user or not bc.check_password_hash( registered_user.password, password):
             flash('Invalid username and/or password.')
             return redirect(url_for('login'))
 
-        session['user_id'] = rows[0]['username']
+        try:
+            access_token = create_access_token(identity=username)
+            refresh_token = create_refresh_token(identity=username)
 
-        flash('Logged In!')
-        return redirect(url_for('home'))
+            session['user_id'] = registered_user.username
+
+            flash('Logged In!')
+            return jsonify({
+                'message': 'Logged in as {}'.format(username),
+                'access_token': access_token,
+                'refresh_token': refresh_token
+            })
+        except:
+            return jsonify({'message': 'Something went wrong'}), 500
 
     else:
         return render_template('login.html')
 
 @app.route("/logout")
+@jwt_required
 def logout():
     """Log user out."""
 
     # forget any user_id
     session.clear()
 
-    # redirect user to login form
-    return redirect(url_for("login"))
+    jti = get_raw_jwt()['jti']
+    try:
+        revoked_token = RevokedTokenModel(jti = jti)
+        revoked_token.add()
+        return jsonify({'message': 'Access token has been revoked.'})
+    except:
+        return jsonify({'message': 'Something went wrong.'}), 500
+
+@app.route("/logout/refresh")
+@jwt_refresh_token_required
+def logout_refresh():
+    jti = get_raw_jwt()['jti']
+    try:
+        revoked_token = RevokedTokenModel(jti = jti)
+        revoked_token.add()
+        return jsonify({'message': 'Refresh token has been revoked.'})
+    except:
+        return jsonify({'message': 'Something went wrong.'}), 500
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -83,26 +129,24 @@ def register():
             error = "Passwords don't match"
             return redirect(url_for('register'))
 
-        # rows = db.execute("SELECT * FROM users WHERE username = :user", {"user": request.form.get('username')}).first()
-
-        # if rows:
-        #     error = 'Username in use. Please choose another.'
-        #     return redirect(url_for('register'))
-
-        user = Users(username, password)
-        #fml
+        user = Users(username, bc.generate_password_hash(password).decode('utf-8'))
         db_session.add(user)
         db_session.commit()
 
-        #original code
-        # db.execute("INSERT INTO users (username, password) VALUES(:username, :password)", {"username": request.form.get("username"), "password": bc.generate_password_hash(request.form.get('password'))}).decode('utf-8')
-        # newRows = db.execute("SELECT * FROM users WHERE username = :username", {"username": request.form.get('username')}).fetchall()
-        session['user_id'] = username
-        # db.commit()
+        try:
+            access_token = create_access_token(identity=username)
+            refresh_token = create_refresh_token(identity=username)
 
-        
-        flash('Registered')
-        return redirect(url_for("home"))
+            session['user_id'] = username
+
+            flash('Registered and Logged In!')
+            return jsonify({
+                'message': 'Logged in as {}'.format(username),
+                'access_token': access_token,
+                'refresh_token': refresh_token
+            })
+        except:
+            return jsonify({'message': 'Something went wrong'}), 500
     
     else:
         return render_template('register.html')
