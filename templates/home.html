@@ -22,12 +22,28 @@
           <input class="form-control" name="password" placeholder="Password" type="password" />
       </div>
       <div>
-          <button class="login-btn" type="submit">Log In</button>
+          <button class="login-btn" type="submit" onclick="addItem()">Log In</button>
         </br>
         <a href="register.html" >register</a>    
       </div>
   </form>
 </div>
+<script>
+  function addItem(e) {
+    if (e.which == 13 || e.keyCode == 13) {
+      let item = document.querySelector(".new-todo");
+      fetch("/add-item", {
+        method: "post",
+        body: JSON.stringify({
+          id: `item-${Date.now()}`,
+          value: item.value,
+        }),
+      }).then((response) => {
+        item.value = "";
+      });
+    }
+  }
+</script>
 {% endblock %}
   
   
