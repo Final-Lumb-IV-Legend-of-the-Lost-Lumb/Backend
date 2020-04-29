@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-
-{% block title %} Register {% endblock %} {% block heading %} Register for an
-account. {% if error %}
-<p>
-  <strong>Error:</strong> {{ error }} {% endif %} {% endblock %} {% block body
-  %}
-</p>
-
+{% extends 'layout.html' %} {% block title %}<title>Register</title> {% endblock
+%} {% block heading %} Register for an account. {% if error %}
+<p><strong>Error:</strong> {{ error }} {% endif %} {% endblock %} %}</p>
+{% block body %}
 <div class="ltPan">
   <img
     class="tigerImg"
