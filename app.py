@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from flask_bootstrap import Bootstrap
 
 Session = sessionmaker()
 engine = create_engine(os.environ['DATABASE_URL'])
