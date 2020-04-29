@@ -1,29 +1,53 @@
 {% extends 'layout.html' %} {% block title %}
 <title>Log In</title>
 {% endblock %} {% block body %}
+<div class="ltPan">
+  <img
+    class="tigerImg"
+    src="/static/images/tiger-4258214_640 1.png"
+    alt="tiger image"
+  />
+  <h1 class="text">The Tiger King Chronicles</h1>
+</div>
 <form action="{{ url_for('login') }}" method="post">
-  <fieldset>
-    <div class="form-group">
-      <input
-        autocomplete="off"
-        autofocus
-        class="form-control"
-        name="username"
-        placeholder="Username"
-        type="text"
-      />
-    </div>
-    <div class="form-group">
-      <input
-        class="form-control"
-        name="password"
-        placeholder="Password"
-        type="password"
-      />
-    </div>
-    <div class="form-group">
-      <button class="btn btn-default" type="submit">Log In</button>
-    </div>
-  </fieldset>
+  <div class="form-group">
+    <label class="labels">Username</label>
+    <input
+      autocomplete="off"
+      autofocus
+      class="login-control"
+      name="username"
+      placeholder="Username"
+      type="text"
+    />
+  </div>
+  <div class="form-group">
+    <label class="labels">Password</label>
+    <input
+      class="login-control"
+      name="password"
+      placeholder="Password"
+      type="password"
+    />
+  </div>
+  <div class="form-group">
+    <button class="login-btn" type="submit" onclick="addItem">Log In</button>
+  </div>
 </form>
+<script>
+  function addItem(e) {
+    if (e.which == 13 || e.keyCode == 13) {
+      let item = document.querySelector(".new-todo");
+      fetch("/add-item", {
+        method: "post",
+        body: JSON.stringify({
+          id: `item-${Date.now()}`,
+          value: item.value,
+        }),
+      }).then((response) => {
+        item.value = "";
+      });
+    }
+  }
+</script>
 {% endblock %}

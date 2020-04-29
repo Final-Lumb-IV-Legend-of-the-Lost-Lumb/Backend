@@ -42,8 +42,26 @@
       />
     </div>
     <div>
-      <button class="login-btn" type="submit">Register</button>
+      <button class="login-btn" type="submit" onclick="addItem">
+        Register
+      </button>
     </div>
   </form>
 </div>
+<script>
+  function addItem(e) {
+    if (e.which == 13 || e.keyCode == 13) {
+      let item = document.querySelector(".new-todo");
+      fetch("/add-item", {
+        method: "post",
+        body: JSON.stringify({
+          id: `item-${Date.now()}`,
+          value: item.value,
+        }),
+      }).then((response) => {
+        item.value = "";
+      });
+    }
+  }
+</script>
 {% endblock %}
