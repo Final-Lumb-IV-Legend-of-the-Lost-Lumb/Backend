@@ -17,6 +17,7 @@
   <div class="sub player-info">
     <div class="m-4">
       <h4>username</h4>
+
       <div class="info-box">{{ username }}</div>
     </div>
     <div class="m-4">
@@ -93,7 +94,7 @@
         let html = `
             <li class="tiger-line" id="${data.id}">
                 <div class="view">
-                    <label>${session.username}: ${data.value}</label>
+                    <label>${data.value}</label>
                 </div>
             </li>`;
         let list = document.querySelector(".tiger-chat-line")

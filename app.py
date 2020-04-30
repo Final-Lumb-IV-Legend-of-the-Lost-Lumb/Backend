@@ -47,11 +47,21 @@ def check_if_token_in_blacklist(decrypted_token):
 def home():
     return render_template('home.html')
 
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/api/lobby', methods=['GET'])
 @jwt_required
 def lobby():
     username = get_jwt_identity()
     return render_template('lobby.html', username = username)
+
+@app.route('/game')
+@jwt_required
+def game():
+    return render_template('game.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
