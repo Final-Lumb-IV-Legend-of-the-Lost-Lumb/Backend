@@ -37,10 +37,11 @@ def check_if_token_in_blacklist(decrypted_token):
 def home():
     return render_template('home.html')
 
-@app.route('/api/lobby')
+@app.route('/api/lobby', methods=['GET'])
 @jwt_required
 def lobby():
-    return render_template('lobby.html')
+    username = get_jwt_identity()
+    return render_template('lobby.html', username = username)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -80,7 +81,7 @@ def login():
     else:
         return render_template('login.html')
 
-@app.route("/logout")
+@app.route("/logout", methods=['POST'])
 @jwt_required
 def logout():
     """Log user out."""
