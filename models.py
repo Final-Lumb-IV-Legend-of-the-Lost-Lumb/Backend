@@ -43,7 +43,7 @@ class RevokedTokenModel(db.Model):
 class Players(db.Model):
     __tablename__ = 'players'
     player_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.string(120), db.ForeignKey('users.username'), unique = True,
+    username = db.Column(db.String(120), db.ForeignKey('users.username'), unique = True,
         nullable=False)
     inventory = db.relationship('PlayerInventory', backref='players', lazy=True)
     money = db.Column(db.Integer(), nullable = False)
@@ -71,11 +71,11 @@ class Items(db.Model):
 
 class PlayerInventory(db.Model):
     __tablename__ = 'player_inventory'
-    item_id = db.Column(db.string(120), db.ForeignKey('items.id'), unique = True,
+    item_id = db.Column(db.String(120), db.ForeignKey('items.id'), unique = True,
         nullable=False)
-    username = db.Column(db.string(120), db.ForeignKey('users.username'), unique = True,
+    username = db.Column(db.String(120), db.ForeignKey('users.username'), unique = True,
         nullable=False)
-    item_name = db.Column(db.string(120), db.ForeignKey('items.item_name'), unique = True,
+    item_name = db.Column(db.String(120), db.ForeignKey('items.item_name'), unique = True,
         nullable=False)
     quantity = db.Column(db.Integer(), nullable = False)
     
@@ -89,7 +89,7 @@ class RoomInventory(db.Model):
         nullable=False)
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.room.id'),
         nullable=False)
-    item_name = db.Column(db.string(120), db.ForeignKey('items.item_name'), unique = True,
+    item_name = db.Column(db.String(120), db.ForeignKey('items.item_name'), unique = True,
         nullable=False)
              
       
