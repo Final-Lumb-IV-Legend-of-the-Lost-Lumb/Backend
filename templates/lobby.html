@@ -72,7 +72,7 @@
       })
     }
 
-    let user = ''
+    let user = {{ session.username }}
   
     function addItem(e) {
         if (e.which == 13 || e.keyCode == 13) {
@@ -86,11 +86,6 @@
             })
             .then(response => {
                 item.value = ''
-                console.log('response',response.text())
-                return response
-                // user = response.data.username
-            }).then(resp => {
-              console.log('resp',resp);
             })
         }
     }
@@ -100,7 +95,7 @@
         let html = `
             <li class="tiger-line" id="${data.id}">
                 <div class="view">
-                    <label>${user}: ${data.value}</label>
+                    <label>${{ session.username }}: ${data.value}</label>
                 </div>
             </li>`;
         let list = document.querySelector(".tiger-chat-line")
