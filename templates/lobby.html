@@ -59,7 +59,7 @@
     </header>
 
     <section class='main'>
-        <ul class='tiger-chat-line'>{{ usermame }}: </ul>
+        <ul class='tiger-chat-line'></ul>
     </section>
 
     <footer class='footer'></footer>
@@ -90,9 +90,9 @@
 
     function appendToList(data) {
         let html = `
-            <li id="${data.id}">
+            <li class="tiger-line" id="${data.id}">
                 <div class="view">
-                    <label>${data.value}</label>
+                    <label>{{ username }}: ${data.value}</label>
                 </div>
             </li>`;
         let list = document.querySelector(".tiger-chat-line")

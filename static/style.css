@@ -124,6 +124,9 @@ nav a {
   overflow: auto;
   height: 200px;
   width: 300px;
+}
+
+.tiger-line {
   list-style-type: none;
 }
 
