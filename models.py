@@ -43,14 +43,13 @@ class RevokedTokenModel(db.Model):
 class Players(db.Model):
     __tablename__ = 'players'
     player_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.string(120), db.ForeignKey('username'), unique = True,
+    username = db.Column(db.string(120), db.ForeignKey('users.username'), unique = True,
         nullable=False)
     inventory = db.relationship('PlayerInventory', backref='players', lazy=True)
     money = db.Column(db.Integer(), nullable = False)
 
 
     def __init__(self, money, inventory={}):
-        super().__init__()
         self.money = money
 
 class Items(db.Model):
@@ -64,7 +63,6 @@ class Items(db.Model):
     item_type = db.Column(db.String(120), nullable=False)
 
     def __init__(self, item_name, buying_value, selling_value, attribute, item_type ):
-        super().__init__()
         self.item_name = item_name
         self.buying_value = buying_value
         self.selling_value = selling_value
@@ -75,7 +73,7 @@ class PlayerInventory(db.Model):
     __tablename__ = 'player_inventory'
     item_id = db.Column(db.string(120), db.ForeignKey('items.id'), unique = True,
         nullable=False)
-    username = db.Column(db.string(120), db.ForeignKey('username'), unique = True,
+    username = db.Column(db.string(120), db.ForeignKey('users.username'), unique = True,
         nullable=False)
     item_name = db.Column(db.string(120), db.ForeignKey('items.item_name'), unique = True,
         nullable=False)
@@ -83,19 +81,18 @@ class PlayerInventory(db.Model):
     
 
     def __init__(self, quantity):
-        super().__init__()
         self.quantity = quantity
 
 class RoomInventory(db.Model):
     __tablename__ = 'room_inventory'
-    item_id = db.Column(db.Integer, db.ForeignKey('item.id'),
+    item_id = db.Column(db.Integer, db.ForeignKey('items.item.id'),
         nullable=False)
-    room_id = db.Column(db.Integer, db.ForeignKey('room.id'),
+    room_id = db.Column(db.Integer, db.ForeignKey('rooms.room.id'),
+        nullable=False)
+    item_name = db.Column(db.string(120), db.ForeignKey('items.item_name'), unique = True,
         nullable=False)
              
-
-    def __init__(self):
-        super().__init__()
+      
 
 class Rooms(db.Model):
     __tablename__ = 'rooms'
@@ -112,7 +109,6 @@ class Rooms(db.Model):
 
 
     def __init__(self, room_name, description, n_to=None, e_to=None, s_to=None, w_to=None, items={}):
-        super().__init__()
         self.room_name = room_name
         self.description = description
         self.n_to = None
