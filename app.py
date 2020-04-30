@@ -1,5 +1,6 @@
 import os
 import json
+from flask_cors import CORS
 from pusher import Pusher
 from flask import Flask, render_template, session, redirect, url_for, flash, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
@@ -14,6 +15,7 @@ Session.configure(bind=engine)
 db_session = Session()
 
 app = Flask(__name__)
+CORS(app)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
