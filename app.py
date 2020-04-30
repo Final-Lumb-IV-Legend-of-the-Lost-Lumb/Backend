@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt, JWTManager)
+from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt, JWTManager, set_access_cookies, unset_jwt_cookies, set_refresh_cookies)
 
 Session = sessionmaker()
 engine = create_engine(os.environ['DATABASE_URL'])
@@ -14,6 +14,11 @@ db_session = Session()
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_COOKIE_SECURE'] = True
+app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+app.config['JWT_ACCESS_COOKIE_PATH'] = '/api'
+app.config['JWT_REFRESH_COOKIE_PATH'] = '/token/refresh'
 bc = Bcrypt(app)
 db = SQLAlchemy(app)
 app.config['JWT_SECRET_KEY'] = 'is-it-secret-is-it-safe'
@@ -32,7 +37,7 @@ def check_if_token_in_blacklist(decrypted_token):
 def home():
     return render_template('home.html')
 
-@app.route('/lobby')
+@app.route('/api/lobby')
 @jwt_required
 def lobby():
     return render_template('lobby.html')
@@ -65,9 +70,10 @@ def login():
             refresh_token = create_refresh_token(identity=username)
 
             session['user_id'] = registered_user.username
-
-            flash('Logged In!')
-            return render_template('lobby.html', access_token=access_token, refresh_token=refresh_token)
+            resp = jsonify({'login': True})
+            set_access_cookies(resp, access_token)
+            set_refresh_cookies(resp, refresh_token)
+            return redirect(url_for('lobby'))
         except:
             return jsonify({'message': 'Something went wrong'}), 500
 
@@ -81,14 +87,25 @@ def logout():
 
     # forget any user_id
     session.clear()
+    resp = jsonify({'logout': True})
 
     jti = get_raw_jwt()['jti']
     try:
+        unset_jwt_cookies(resp)
         revoked_token = RevokedTokenModel(jti = jti)
         revoked_token.add()
         return jsonify({'message': 'Access token has been revoked.'})
     except:
         return jsonify({'message': 'Something went wrong.'}), 500
+
+@app.route('/token/refresh', methods=['POST'])
+@jwt_refresh_token_required
+def refresh():
+    current_user = get_jwt_identity()
+    access_token = create_access_token(identity=current_user)
+    resp = jsonify({'refresh': True})
+    set_access_cookies(resp, access_token)
+    return resp, 200
 
 @app.route("/logout/refresh")
 @jwt_refresh_token_required
@@ -133,9 +150,11 @@ def register():
             refresh_token = create_refresh_token(identity=username)
 
             session['user_id'] = username
+            resp = jsonify({'login': True})
+            set_access_cookies(resp, access_token)
+            set_refresh_cookies(resp, refresh_token)
 
-            flash('Registered and Logged In!')
-            return render_template('lobby.html', access_token=access_token, refresh_token=refresh_token)
+            return redirect(url_for('lobby'))
         except:
             return jsonify({'message': 'Something went wrong'}), 500
     
