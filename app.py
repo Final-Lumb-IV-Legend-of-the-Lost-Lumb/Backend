@@ -96,7 +96,7 @@ def addItem():
     username = get_jwt_identity()
     data = json.loads(request.data) # load JSON data from request
     pusher.trigger('item', 'item-added', data) # trigger 'item-added' event on 'item' channel
-    return jsonify(data, username=username)
+    return jsonify(data, username)
 
 @app.route("/logout", methods=['POST'])
 @jwt_required
