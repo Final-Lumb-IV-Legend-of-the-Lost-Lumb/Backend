@@ -50,9 +50,12 @@ nav {
   width: 100%;
 }
 
-.game {
+.game{
   height: 70vh;
-  background-color: #000;
+}
+
+.game img {
+  display: none
 }
 
 /*!
