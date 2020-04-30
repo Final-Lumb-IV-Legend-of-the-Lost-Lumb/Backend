@@ -98,7 +98,11 @@
         let list = document.querySelector(".tiger-chat")
         list.innerHTML += html;
     };
-
+  </script>
+  
+  <!-- Pusher Scripts -->
+  <script src='https://js.pusher.com/4.1/pusher.min.js'></script>
+  <script>
     //configure pusher
     const pusher = new Pusher('a7f244850a810c4fcb15', {
                 cluster: 'us2',
@@ -113,8 +117,6 @@
                 appendToList(data);
             });
   </script>
-  <!-- Pusher Scripts -->
-  <script src='https://js.pusher.com/4.1/pusher.min.js'></script>
 
   {% endblock %}
 </section>
