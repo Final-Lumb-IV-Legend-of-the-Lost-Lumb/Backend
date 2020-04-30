@@ -32,10 +32,19 @@ def check_if_token_in_blacklist(decrypted_token):
 def home():
     return render_template('home.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/lobby')
 @jwt_required
 def lobby():
     return render_template('lobby.html')
+
+@app.route('/game')
+@jwt_required
+def game():
+    return render_template('game.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
