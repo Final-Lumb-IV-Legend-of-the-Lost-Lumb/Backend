@@ -6,7 +6,7 @@
     ><h2 class="navtext">The Tiger King Chronicle</h2></span
   >
   <span
-    ><div class="btn btn-secondary mr-5"><h3>Logout</h3></div></span
+    ><div onclick='logout()' class="btn btn-secondary mr-5"><h3>Logout</h3></div></span
   >
 </nav>
 
@@ -17,7 +17,8 @@
   <div class="sub player-info">
     <div class="m-4">
       <h4>username</h4>
-      <div class="info-box">{{username}}</div>
+
+      <div class="info-box">{{ username }}</div>
     </div>
     <div class="m-4">
       <h4>avatar</h4>
@@ -33,7 +34,7 @@
   </div>
 
   <div class="sub player-avatar">
-    <img src="/static/images/tiger-4258214_640 1.png" />
+    <img src="/static/images/tiger-4258214_6401.png" />
   </div>
 
   <div class="sub player-things">
@@ -51,6 +52,73 @@
       >
     </div>
   </div>
+
+  <section class-'tiger-chat'>
+    <header class='header'>
+        <h1>Chat</h1>
+        <input class='tiger-input' placeholder="Type to chat" autofocus='' onkeypress="addItem(event)">
+    </header>
+
+    <section class='main'>
+        <ul class='tiger-chat-line'></ul>
+    </section>
+
+    <footer class='footer'></footer>
+</section>
+
+  <script>
+    function logout() {
+      fetch('/logout', {
+        method: 'post'
+      })
+    }
+  
+    function addItem(e) {
+        if (e.which == 13 || e.keyCode == 13) {
+            let item = document.querySelector('.tiger-input');
+            fetch('/add-item', {
+                method: 'post',
+                body: JSON.stringify({
+                    id: `item-${Date.now()}`,
+                    value: item.value
+                })
+            })
+            .then(response => {
+                item.value = ''
+            })
+        }
+    }
+
+    function appendToList(data) {
+      // console.log(user);
+        let html = `
+            <li class="tiger-line" id="${data.id}">
+                <div class="view">
+                    <label>${data.value}</label>
+                </div>
+            </li>`;
+        let list = document.querySelector(".tiger-chat-line")
+        list.innerHTML += html;
+    };
+  </script>
+  
+  <!-- Pusher Scripts -->
+  <script src='https://js.pusher.com/4.1/pusher.min.js'></script>
+  <script>
+    //configure pusher
+    const pusher = new Pusher('a7f244850a810c4fcb15', {
+                cluster: 'us2',
+                encrypted: true
+            });
+
+            // subscribe to channel
+            const channel = pusher.subscribe('item');
+
+            // listen for item-added events, and update list once even is triggered
+            channel.bind('item-added', data => {
+                appendToList(data);
+            });
+  </script>
 
   {% endblock %}
 </section>

@@ -8,3 +8,4 @@ gunicorn
 autoenv
 flask-bcrypt
 flask-jwt-extended
+pusher

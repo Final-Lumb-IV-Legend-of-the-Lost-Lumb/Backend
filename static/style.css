@@ -119,3 +119,17 @@ nav a {
   background: #ffc48d;
   border-radius: 10px;
 }
+
+.tiger-chat-line {
+  overflow: auto;
+  height: 200px;
+  width: 300px;
+}
+
+.tiger-line {
+  list-style-type: none;
+}
+
+.tiger-input {
+  width: 300px;
+}
