@@ -52,14 +52,14 @@
     </div>
   </div>
 
-  <section class-'todoapp'>
+  <section class-'tiger-chat'>
     <header class='header'>
         <h1>Chat</h1>
         <input class='tiger-input' placeholder="Type to chat" autofocus='' onkeypress="addItem(event)">
     </header>
 
     <section class='main'>
-        <ul class='tiger-chat'></ul>
+        <ul class='tiger-chat-line'></ul>
     </section>
 
     <footer class='footer'></footer>
@@ -95,7 +95,7 @@
                     <label>${data.value}</label>
                 </div>
             </li>`;
-        let list = document.querySelector(".tiger-chat")
+        let list = document.querySelector(".tiger-chat-line")
         list.innerHTML += html;
     };
   </script>

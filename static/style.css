@@ -119,3 +119,9 @@ nav a {
   background: #ffc48d;
   border-radius: 10px;
 }
+
+.tiger-chat {
+  overflow: auto;
+  height: 200px;
+  width: 200px;
+}
