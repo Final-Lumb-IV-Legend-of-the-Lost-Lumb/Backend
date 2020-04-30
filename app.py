@@ -88,14 +88,14 @@ def logout():
 
     # forget any user_id
     session.clear()
-    resp = jsonify({'logout': True})
+    resp = make_response(redirect(url_for('login')))
 
     jti = get_raw_jwt()['jti']
     try:
         unset_jwt_cookies(resp)
         revoked_token = RevokedTokenModel(jti = jti)
         revoked_token.add()
-        return jsonify({'message': 'Access token has been revoked.'})
+        return resp
     except:
         return jsonify({'message': 'Something went wrong.'}), 500
 
