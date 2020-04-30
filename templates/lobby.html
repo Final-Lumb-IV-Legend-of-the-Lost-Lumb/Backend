@@ -86,13 +86,14 @@
             })
             .then(response => {
                 item.value = ''
-                user = response.data.username
+                console.log(response)
+                // user = response.data.username
             });
         }
     }
 
     function appendToList(data) {
-      console.log(user);
+      // console.log(user);
         let html = `
             <li class="tiger-line" id="${data.id}">
                 <div class="view">
