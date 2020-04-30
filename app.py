@@ -71,10 +71,10 @@ def login():
             refresh_token = create_refresh_token(identity=username)
 
             session['user_id'] = registered_user.username
-            resp = jsonify({'login': True})
+            resp = make_response(redirect(url_for('lobby')))
             set_access_cookies(resp, access_token)
             set_refresh_cookies(resp, refresh_token)
-            return redirect(url_for('lobby'))
+            return resp
         except:
             return jsonify({'message': 'Something went wrong'}), 500
 
@@ -151,11 +151,11 @@ def register():
             refresh_token = create_refresh_token(identity=username)
 
             session['user_id'] = username
-            resp = jsonify({'login': True})
+            resp = make_response(redirect(url_for('lobby')))
             set_access_cookies(resp, access_token)
             set_refresh_cookies(resp, refresh_token)
 
-            return redirect(url_for('lobby'))
+            return resp
         except:
             return jsonify({'message': 'Something went wrong'}), 500
     
