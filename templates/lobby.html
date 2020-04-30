@@ -86,7 +86,7 @@
             })
             .then(response => {
                 item.value = ''
-                console.log('response',response.json())
+                console.log('response',response.text())
                 return response
                 // user = response.data.username
             }).then(resp => {
