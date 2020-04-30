@@ -92,11 +92,12 @@ def login():
         return render_template('login.html')
 
 @app.route('/add-item', methods=['POST'])
+@jwt_required
 def addItem():
     username = get_jwt_identity()
     data = json.loads(request.data) # load JSON data from request
     pusher.trigger('item', 'item-added', data) # trigger 'item-added' event on 'item' channel
-    return jsonify(data=data, username=username)
+    return jsonify(data, username)
 
 @app.route("/logout", methods=['POST'])
 @jwt_required
