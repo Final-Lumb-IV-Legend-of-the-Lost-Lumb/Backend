@@ -92,6 +92,7 @@ def login():
         return render_template('login.html')
 
 @app.route('/add-item', methods=['POST'])
+@jwt_required
 def addItem():
     data = json.loads(request.data) # load JSON data from request
     pusher.trigger('item', 'item-added', data) # trigger 'item-added' event on 'item' channel

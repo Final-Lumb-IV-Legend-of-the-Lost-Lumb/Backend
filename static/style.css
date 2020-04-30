@@ -120,8 +120,12 @@ nav a {
   border-radius: 10px;
 }
 
-.tiger-chat {
+.tiger-chat-line {
   overflow: auto;
   height: 200px;
-  width: 200px;
+  width: 300px;
+}
+
+.tiger-input {
+  width: 300px;
 }
