@@ -1,4 +1,6 @@
 import os
+import json
+from pusher import Pusher
 from flask import Flask, render_template, session, redirect, url_for, flash, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -25,6 +27,14 @@ app.config['JWT_SECRET_KEY'] = 'is-it-secret-is-it-safe'
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 jwt = JWTManager(app)
+
+pusher = Pusher(
+    app_id = "992225",
+    key = os.environ['PUSHER_KEY'],
+    secret = os.environ['PUSHER_SECRET'],
+    cluster = "us2",
+    ssl=True
+)
 
 from models import Users, RevokedTokenModel
 
@@ -80,6 +90,12 @@ def login():
 
     else:
         return render_template('login.html')
+
+@app.route('/add-item', methods=['POST'])
+def addItem():
+    data = json.loads(request.data) # load JSON data from request
+    pusher.trigger('item', 'item-added', data) # trigger 'item-added' event on 'item' channel
+    return jsonify(data)
 
 @app.route("/logout", methods=['POST'])
 @jwt_required
