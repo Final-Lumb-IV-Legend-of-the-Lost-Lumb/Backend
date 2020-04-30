@@ -93,12 +93,11 @@ def login():
 
 @app.route('/add-item', methods=['POST'])
 def addItem():
-    username = session.get("USERNAME")
-    user = username[username]
+    username = session["username"]
     # Somehow we need to be able to grab the username from the user who sent the message.
     data = json.loads(request.data) # load JSON data from request
     pusher.trigger('item', 'item-added', data) # trigger 'item-added' event on 'item' channel
-    return jsonify(data, user)
+    return jsonify(data, username)
 
 @app.route("/logout", methods=['POST'])
 @jwt_required
