@@ -39,6 +39,70 @@
 
     </section>
 
+    <script src="moment.js"></script>
+
+    <section class-'tiger-chat'>
+      <header class='header'>
+          <h1>Chat</h1>
+          <input class='tiger-input' placeholder="Type to chat" autofocus='' onkeypress="addItem(event)">
+      </header>
+  
+      <section class='main'>
+          <ul class='tiger-chat-line'></ul>
+      </section>
+  
+      <footer class='footer'></footer>
+  </section>
+  
+    <script>
+        
+      function addItem(e) {
+          if (e.which == 13 || e.keyCode == 13) {
+              let item = document.querySelector('.tiger-input');
+              fetch('/add-item', {
+                  method: 'post',
+                  body: JSON.stringify({
+                      id: `item-${Date.now()}`,
+                      value: item.value
+                  })
+              })
+              .then(response => {
+                  item.value = ''
+              })
+          }
+      }
+  
+      function appendToList(data) {
+        // console.log(user);
+          let html = `
+              <li class="tiger-line" id="${data.id}">
+                  <div class="view">
+                      <label>{moment().format("h:mm:ss a")}-${data.value}</label>
+                  </div>
+              </li>`;
+          let list = document.querySelector(".tiger-chat-line")
+          list.innerHTML += html;
+      };
+    </script>
+    
+    <!-- Pusher Scripts -->
+    <script src='https://js.pusher.com/4.1/pusher.min.js'></script>
+    <script>
+      //configure pusher
+      const pusher = new Pusher('a7f244850a810c4fcb15', {
+                  cluster: 'us2',
+                  encrypted: true
+              });
+  
+              // subscribe to channel
+              const channel = pusher.subscribe('item');
+  
+              // listen for item-added events, and update list once even is triggered
+              channel.bind('item-added', data => {
+                  appendToList(data);
+              });
+    </script>
+
     <!--Bootstrap Jquery and popper -->
     <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> -->

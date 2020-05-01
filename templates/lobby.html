@@ -53,6 +53,8 @@
     </div>
   </div>
 
+  <script src="moment.js"></script>
+
   <section class-'tiger-chat'>
     <header class='header'>
         <h1>Chat</h1>
@@ -94,7 +96,7 @@
         let html = `
             <li class="tiger-line" id="${data.id}">
                 <div class="view">
-                    <label>${data.value}</label>
+                    <label>{moment().format("h:mm:ss a")}-${data.value}</label>
                 </div>
             </li>`;
         let list = document.querySelector(".tiger-chat-line")
