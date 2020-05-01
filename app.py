@@ -39,10 +39,10 @@ pusher = Pusher(
 )
 
 '''
-currency spending, buy item, logout.
+currency spending, buy item.
 '''
 
-from models import Users, RevokedTokenModel
+from models import Users, RevokedTokenModel, Items, PlayerInventory
 
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
@@ -67,6 +67,47 @@ def lobby():
 @jwt_required
 def game():
     return render_template('game.html')
+
+@app.route('/api/inventory', methods=['GET'])
+@jwt_required
+def inventory():
+    username = session['username']
+    user = Users.query.filter_by(username=username)
+    items = PlayerInventory.query.filter_by(user_id=user.id)
+    return items
+
+@app.route('/api/shop', methods=['GET', 'POST'])
+@jwt_required
+def shop():
+    if request.method == 'GET':
+        return render_template('shop.html')
+    else:
+        db_items = Items.query.all()
+
+        all_items = [x.item_name for x in db_items]
+
+        return render_template('shop.html', items=all_items)
+
+
+@app.route('/api/buy', methods=['POST'])
+@jwt_required
+def buy(item):
+    username = session['username']
+    user = Users.query.filter_by(username=username).first()
+    player_item = PlayerInventory.query.filter_by(item_name=item)
+    if not player_item:
+        if item == 'tiger' or item == 'lion':
+            add_item=Items('1', username.id, item, 1, 500000)
+            db_session.add(add_item)
+            db_session.commit()
+        elif item == 'sugar':
+            add_item=Items(1, username.id, item, 1, 500)
+            db_session.add(add_item)
+            db_session.commit()
+    else:
+        player_items = PlayerInventory.query.filter_by(item_name=player_item.item_name,user_id=user.id)
+        player_items.quantity += 1
+        db_session.commit()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
