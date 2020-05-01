@@ -112,7 +112,7 @@ def addItem():
     pusher.trigger('item', 'item-added', data) # trigger 'item-added' event on 'item' channel
     return jsonify(data)
 
-@app.route("/logout", methods=['POST'])
+@app.route("/api/logout")
 @jwt_required
 def logout():
     """Log user out."""

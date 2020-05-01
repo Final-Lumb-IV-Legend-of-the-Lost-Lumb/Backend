@@ -6,7 +6,7 @@
     ><h2 class="navtext">The Tiger King Chronicles</h2></span
   >
   <span
-    ><div onclick='logout()' class="btn btn-secondary mr-5"><h3>Logout</h3></div></span
+    ><a href='/api/logout'><div class="btn btn-secondary mr-5"><h3>Logout</h3></div></a></span
   >
 </nav>
 
@@ -67,11 +67,11 @@
 </section>
 
   <script>
-    function logout() {
-      fetch('/logout', {
-        method: 'post'
-      })
-    }
+    // function logout() {
+    //   fetch('/logout', {
+    //     method: 'post'
+    //   })
+    // }
   
     function addItem(e) {
         if (e.which == 13 || e.keyCode == 13) {
