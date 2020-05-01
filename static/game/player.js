@@ -9,8 +9,8 @@ export default class Player {
     this.image = document.getElementById("carole");
 
     //player's size
-    this.width = 30;
-    this.height = 30;
+    this.width = 50;
+    this.height = 50;
     //player move
     this.direction = 0;
     this.map = data.map2;
@@ -22,157 +22,126 @@ export default class Player {
     //player current coordinates x & y
     // this.xPos = this.column;
     // this.yPos = this.row;
-    this.xPos = 30 * this.column;
-    this.yPos = 30 * this.row;
+    this.xPos = 50 * this.column;
+    this.yPos = 50 * this.row;
 
     //player's in game inventory
-    this.inventory = [];
+    this.sardine = 0;
+    this.gotJoe = false;
   }
 
-  moveLeft() {
-    console.log("leftKey pressed");
-    console.log(this.row, this.column);
-    if (this.column > 0 && this.map.array[this.row][this.column - 1] !== 1) {
-      ctx2.clearRect(this.xPos, this.yPos, this.width, this.height);
+  pickItem() {
+    if (this.map.array[this.row][this.column] == 2) {
+      this.sardine++;
+      this.map.array[this.row][this.column] = 0;
+      console.log(this.sardine);
+    }
+    this.unlockDoor();
+  }
 
-      this.direction = 3;
-      this.column = this.column - 1;
-      this.xPos = this.xPos - 30;
-      console.log(this.xPos);
+  unlockDoor() {
+    if (this.sardine == 3) {
       ctx2.fillStyle = "lightgray";
-      ctx2.fillRect(this.xPos + 30, this.yPos, this.width, this.height);
-      // ctx2.fillStyle = "red";
-      // ctx2.fillRect(this.xPos, this.yPos, this.width, this.height);
-      ctx2.drawImage(this.image, this.xPos, this.yPos, this.height, this.width);
+      ctx2.fillRect(
+        this.map.theDoor[1] * 50,
+        this.map.theDoor[0] * 50,
+        this.width,
+        this.height
+      );
+      this.map.array[this.map.theDoor[0]][this.map.theDoor[1]] = 0;
+      this.sardine = 0;
     }
   }
 
+  get_joe() {
+    if (this.map.array[this.row][this.column] == 5) {
+      this.gotJoe = true;
+      this.map.array[this.row][this.column] = 0;
+      console.log(this.gotJoe);
+    }
+  }
+
+  feedTheTiger() {
+    if (this.gotJoe == true && this.map.array[this.row][this.column] == 6) {
+      function timeout() {
+        setTimeout(() => {
+          alert("You successfully fed your tiger with Joe Exotic!");
+        }, 500);
+      }
+      ctx2.drawImage(
+        document.getElementById("fedTiger"),
+        50 * this.map.cage[1],
+        50 * this.map.cage[0],
+        this.height,
+        this.width
+      );
+      timeout();
+    }
+  }
+
+  moveLeft() {
+    if (this.column > 0 && this.map.array[this.row][this.column - 1] !== 1) {
+      ctx2.clearRect(this.xPos, this.yPos, this.width, this.height);
+      this.direction = 3;
+      this.column = this.column - 1;
+      this.xPos = this.xPos - 50;
+      ctx2.fillStyle = "lightgray";
+      ctx2.fillRect(this.xPos + 50, this.yPos, this.width, this.height);
+      ctx2.drawImage(this.image, this.xPos, this.yPos, this.height, this.width);
+    }
+    this.pickItem();
+    this.get_joe();
+    this.feedTheTiger();
+  }
+
   moveRight() {
-    console.log("right Key pressed");
-    console.log(this.row, this.column);
     if (this.column < 14 && this.map.array[this.row][this.column + 1] !== 1) {
       ctx2.clearRect(this.xPos, this.yPos, this.width, this.height);
       this.direction = 4;
       this.column = this.column + 1;
-      this.xPos = this.xPos + 30;
-      console.log(this.xPos);
+      this.xPos = this.xPos + 50;
       ctx2.fillStyle = "lightgray";
-      ctx2.fillRect(this.xPos - 30, this.yPos, this.width, this.height);
-      // ctx2.fillStyle = "red";
-      // ctx2.fillRect(this.xPos, this.yPos, this.width, this.height);
+      ctx2.fillRect(this.xPos - 50, this.yPos, this.width, this.height);
       ctx2.drawImage(this.image, this.xPos, this.yPos, this.height, this.width);
     }
+    this.pickItem();
+    this.get_joe();
+    this.feedTheTiger();
   }
 
   moveUp() {
-    console.log("up Key pressed");
-    console.log(this.row, this.column);
     if (this.row > 0 && this.map.array[this.row - 1][this.column] !== 1) {
       ctx2.clearRect(this.xPos, this.yPos, this.width, this.height);
-      console.log("row", this.row);
       this.direction = 1;
       this.row = this.row - 1;
-      this.yPos = this.yPos - 30;
+      this.yPos = this.yPos - 50;
       ctx2.fillStyle = "lightgray";
-      ctx2.fillRect(this.xPos, this.yPos + 30, this.width, this.height);
-      // ctx2.fillStyle = "red";
-      // ctx2.fillRect(this.xPos, this.yPos, this.width, this.height);
+      ctx2.fillRect(this.xPos, this.yPos + 50, this.width, this.height);
       ctx2.drawImage(this.image, this.xPos, this.yPos, this.height, this.width);
     }
+    this.pickItem();
+    this.get_joe();
+    this.feedTheTiger();
   }
 
   moveDown() {
-    console.log("down Key pressed");
-    console.log(this.row, this.column);
     if (this.row < 14 && this.map.array[this.row + 1][this.column] !== 1) {
       ctx2.clearRect(this.xPos, this.yPos, this.width, this.height);
       this.direction = 2;
       this.row = this.row + 1;
-      this.yPos = this.yPos + 30;
-      console.log(this.yPos);
+      this.yPos = this.yPos + 50;
       ctx2.fillStyle = "lightgray";
-      ctx2.fillRect(this.xPos, this.yPos - 30, this.width, this.height);
-      // ctx2.fillStyle = "red";
-      // ctx2.fillRect(this.xPos, this.yPos, this.width, this.height);
+      ctx2.fillRect(this.xPos, this.yPos - 50, this.width, this.height);
       ctx2.drawImage(this.image, this.xPos, this.yPos, this.height, this.width);
     }
+    this.pickItem();
+    this.get_joe();
+    this.feedTheTiger();
   }
 
-  pickItem() {
-    // if (map1.array[this.row][this.column] == 2) {
-    //     this.inventory.push() //this isn't right but something like this
-    // }
-    //pick up item function
-    //when player approached some certain coordinate in the map
-    //pick up the item
-  }
-
-  //once you have 3 sardine oils, you can unlock door
-  unlockDoor() {
-    //check if the next position is the door
-    //check if the player has 3 sardine oil
-    //if so, unlock the door
-  }
-
-  feedTheTiger() {
-    //check if the player at the finish line (the coordinate)
-    //check if the player has the man
-    //"the man saw a tiger and the tiger ate the man"
-    //playerWins
-  }
-
-  // move(value){
-  //     console.log(this.map)
-  //     console.log(this.map.startingPoint)
-  //     console.log(this.row, this.column)
-  //     switch(value){
-  //         case 'up':
-  //             if (this.row > 0 && this.map.array[this.row - 1][this.column] != 1) {
-  //                 console.log("row", this.row)
-  //                 this.direction = 1
-  //                 this.row = this.row -1
-  //                 this.yPos = this.yPos -30
-  //             }
-  //         case 'down':
-  //             if (this.row < 14 && this.map.array[this.row + 1][this.column] != 1) {
-  //                 this.direction = 2
-  //                 this.row = this.row + 1
-  //                 this.yPos = this.yPos + 30
-  //             }
-  //         case 'left':
-  //             alert("LEFT MOFO")
-  //             if (this.column > 0 && this.map.array[this.row][this.column - 1] != 1) {
-  //                 this.direction = 3
-  //                 this.column = this.column - 1
-  //                 this.xPos = this.xPos - 30
-  //             }
-  //         case 'right':
-  //             if (this.column < 14 && this.map.array[this.row][this.column + 1] != 1) {
-  //                 this.direction = 4
-  //                 this.column =this.column + 1
-  //                 this.xPos = this.xPos + 30
-  //             }
-
-  //     }
-  // }
-
-  //pick up item
+  // win() {}
 
   draw(ctx) {
-    // sprite test
     ctx.drawImage(this.image, this.xPos, this.yPos, this.height, this.width);
-    // ctx.fillStyle = "red";
-    // ctx.fillRect(this.xPos, this.yPos, this.width, this.height);
-
-    // ctx.width = ctx.width
   }
-
-  // update(dt) {
-  //     this.position.x += this.speed;
-
-  //     if (this.position.x < 0) this.position.x = 0;
-
-  //     if (this.position.x + this.width > this.gameWidth)
-  //       this.position.x = this.gameWidth - this.width;
-  //   }
 }
