@@ -65,7 +65,7 @@ export default class Player {
     if (this.gotJoe == true && this.map.array[this.row][this.column] == 6) {
       function timeout() {
         setTimeout(() => {
-          alert("You successfully fed your tiger with Joe Exotic!");
+          window.alert("You successfully fed your tiger with Joe Exotic!");
         }, 500);
       }
       ctx2.drawImage(
