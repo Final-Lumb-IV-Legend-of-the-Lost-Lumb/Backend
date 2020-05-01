@@ -75,7 +75,7 @@ def inventory():
     username = session['username']
     user = Users.query.filter_by(username=username)
     items = PlayerInventory.query.filter_by(user_id=user.id)
-    return items
+    return render_template('inventory.html', items=items)
 
 @app.route('/api/shop', methods=['GET'])
 @jwt_required
@@ -84,7 +84,7 @@ def shop():
 
     all_items = [x.item_name for x in db_items]
 
-    return all_items
+    return render_template('shop.html', all_items=all_items)
 
 
 @app.route('/api/buy', methods=['POST'])
