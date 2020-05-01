@@ -44,11 +44,22 @@ export default class Collectible {
     // tiger
     ctx.drawImage(
       document.getElementById("tiger"),
-      30 * this.map.finishLine[1],
-      30 * this.map.finishLine[0],
+      30 * this.map.cage[1],
+      30 * this.map.cage[0],
       this.height,
       this.width
     );
+
+    //tiger cage
+    ctx.beginPath();
+    ctx.moveTo(this.map.cage[1] * 30, this.map.cage[0] * 30);
+    ctx.lineTo(this.map.cage[1] * 30, (this.map.cage[0] + 1) * 30);
+    ctx.lineTo((this.map.cage[1] + 1) * 30, (this.map.cage[0] + 1) * 30);
+    ctx.lineTo((this.map.cage[1] + 1) * 30, (this.map.cage[0] + 0) * 30);
+    ctx.lineTo(this.map.cage[1] * 30, this.map.cage[0] * 30);
+    ctx.strokeStyle = "black";
+    ctx.stroke();
+
     // joe
     ctx.drawImage(
       document.getElementById("joe"),
@@ -57,5 +68,11 @@ export default class Collectible {
       this.height,
       this.width
     );
+
+    // door
+    ctx.fillStyle = "lightgray";
+    ctx.fillRect(this.map.theDoor[1] * 30, this.map.theDoor[0] * 30, 30, 30);
+    ctx.fillStyle = "red";
+    ctx.fillRect(this.map.theDoor[1] * 30, this.map.theDoor[0] * 30, 30, 30);
   }
 }
