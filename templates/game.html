@@ -11,35 +11,43 @@
     </nav>
 
     <section class="game-page container">
-      <div class="game">
-        <img id="carole" src="../static/images/Carole.png" />
-        <img id="fish" src="../static/images/fish.png" />
-        <img id="tiger" src="../static/images/tiger.png" />
-        <img id="joe" src="../static/images/joe.png" />
-        <img id="fedTiger" src="../static/images/red tiger.png" />
-        <canvas id="gameScreen" width="450px" height="450px"> </canvas>
-        <!-- 2 min 1 canvas for bg 2 for players/movable object for -->
-        <!--initialize js call canvas in that, reference by call that function in different files-->
-        <script type="module" src="../static/game/index.js"></script>
-      </div>
-      <div class="d-flex justify-content-between">
-        <span>username: {{ username }}</span>
-        <!-- <span>current score: 50</span> -->
+      <div class='row'>
+        <div class='col'>
+          <div class="game">
+            <img id="carole" src="../static/images/Carole.png" />
+            <img id="fish" src="../static/images/fish.png" />
+            <img id="tiger" src="../static/images/tiger.png" />
+            <img id="joe" src="../static/images/joe.png" />
+            <img id="fedTiger" src="../static/images/red tiger.png" />
+            <canvas id="gameScreen" width="450px" height="450px"> </canvas>
+            <!-- 2 min 1 canvas for bg 2 for players/movable object for -->
+            <!--initialize js call canvas in that, reference by call that function in different files-->
+            <script type="module" src="../static/game/index.js"></script>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>username: {{ username }}</span>
+            <!-- <span>current score: 50</span> -->
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class-'tiger-chat'>
-      <header class='header'>
-          <h1>Chat</h1>
-          <input class='tiger-input' placeholder="Type to chat" autofocus='' onkeypress="addItem(event)">
-      </header>
-  
-      <section class='main'>
-          <ul class='tiger-chat-line'></ul>
-      </section>
-  
-      <footer class='footer'></footer>
-  </section>
+    <div class='row'>
+      <div class='col'>
+        <section class-'tiger-chat'>
+          <header class='header'>
+              <h1>Chat</h1>
+              <input class='tiger-input' placeholder="Type to chat" autofocus='' onkeypress="addItem(event)">
+          </header>
+      
+          <section class='main'>
+              <ul class='tiger-chat-line'></ul>
+          </section>
+      
+          <footer class='footer'></footer>
+        </section>
+      </div>
+    </div>
   
     <script>
         
