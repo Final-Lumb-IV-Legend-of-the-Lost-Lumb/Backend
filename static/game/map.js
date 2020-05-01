@@ -14,7 +14,7 @@ import { data } from "./data.js";
         
 //     }
 // }
-let size = 50
+let size = 30
 
 export default function mapBuilder(ctx, map){
     for (let i=0; i <map.array.length ; i++){

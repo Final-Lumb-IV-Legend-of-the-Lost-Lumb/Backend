@@ -4,8 +4,8 @@ export default class Collectible {
   constructor(game, name, x, y) {
     this.image = document.getElementById("fish");
 
-    this.width = 50;
-    this.height = 50;
+    this.width = 30;
+    this.height = 30;
 
     this.name = name;
     this.map = data.map2;
@@ -18,8 +18,8 @@ export default class Collectible {
     //player current coordinates x & y
     // this.xPos = this.column;
     // this.yPos = this.row;
-    this.xPos = 50 * this.column;
-    this.yPos = 50 * this.row;
+    this.xPos = 30 * this.column;
+    this.yPos = 30 * this.row;
   }
 
   draw(ctx) {
@@ -28,32 +28,32 @@ export default class Collectible {
     // sardine 2
     ctx.drawImage(
       this.image,
-      50 * this.map.sardineOil[1][1],
-      50 * this.map.sardineOil[1][0],
+      30 * this.map.sardineOil[1][1],
+      30 * this.map.sardineOil[1][0],
       this.height,
       this.width
     );
     // sardine 3
     ctx.drawImage(
       this.image,
-      50 * this.map.sardineOil[2][1],
-      50 * this.map.sardineOil[2][0],
+      30 * this.map.sardineOil[2][1],
+      30 * this.map.sardineOil[2][0],
       this.height,
       this.width
     );
     // tiger
     ctx.drawImage(
       document.getElementById("tiger"),
-      50 * this.map.finishLine[1],
-      50 * this.map.finishLine[0],
+      30 * this.map.finishLine[1],
+      30 * this.map.finishLine[0],
       this.height,
       this.width
     );
     // joe
     ctx.drawImage(
       document.getElementById("joe"),
-      50 * this.map.theMan[1],
-      50 * this.map.theMan[0],
+      30 * this.map.theMan[1],
+      30 * this.map.theMan[0],
       this.height,
       this.width
     );
