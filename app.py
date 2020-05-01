@@ -38,6 +38,10 @@ pusher = Pusher(
     ssl=True
 )
 
+'''
+currency spending, buy item, logout.
+'''
+
 from models import Users, RevokedTokenModel
 
 @jwt.token_in_blacklist_loader
@@ -48,7 +52,6 @@ def check_if_token_in_blacklist(decrypted_token):
 @app.route('/')
 def home():
     return render_template('home.html')
-
 
 @app.route('/about')
 def about():
@@ -187,7 +190,6 @@ def register():
             return resp
         except:
             return jsonify({'message': 'Something went wrong'}), 500
-    
     else:
         return render_template('register.html')
 

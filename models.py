@@ -9,7 +9,7 @@ class Users(db.Model):
     username = db.Column(db.String(120), unique = True, nullable = False)
     password = db.Column(db.String(), nullable = False)
     
-    money = db.Column(db.Integer(), nullable = False)
+    money = db.Column(db.Integer())
     
 
     def __init__(self, username, password, money):
