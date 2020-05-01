@@ -9,8 +9,8 @@ export default class Player {
     this.image = document.getElementById("carole");
 
     //player's size
-    this.width = 50;
-    this.height = 50;
+    this.width = 30;
+    this.height = 30;
     //player move
     this.direction = 0;
     this.map = data.map2;
@@ -22,8 +22,8 @@ export default class Player {
     //player current coordinates x & y
     // this.xPos = this.column;
     // this.yPos = this.row;
-    this.xPos = 50 * this.column;
-    this.yPos = 50 * this.row;
+    this.xPos = 30 * this.column;
+    this.yPos = 30 * this.row;
 
     //player's in game inventory
     this.inventory = [];
@@ -37,10 +37,10 @@ export default class Player {
 
       this.direction = 3;
       this.column = this.column - 1;
-      this.xPos = this.xPos - 50;
+      this.xPos = this.xPos - 30;
       console.log(this.xPos);
       ctx2.fillStyle = "lightgray";
-      ctx2.fillRect(this.xPos + 50, this.yPos, this.width, this.height);
+      ctx2.fillRect(this.xPos + 30, this.yPos, this.width, this.height);
       // ctx2.fillStyle = "red";
       // ctx2.fillRect(this.xPos, this.yPos, this.width, this.height);
       ctx2.drawImage(this.image, this.xPos, this.yPos, this.height, this.width);
@@ -54,10 +54,10 @@ export default class Player {
       ctx2.clearRect(this.xPos, this.yPos, this.width, this.height);
       this.direction = 4;
       this.column = this.column + 1;
-      this.xPos = this.xPos + 50;
+      this.xPos = this.xPos + 30;
       console.log(this.xPos);
       ctx2.fillStyle = "lightgray";
-      ctx2.fillRect(this.xPos - 50, this.yPos, this.width, this.height);
+      ctx2.fillRect(this.xPos - 30, this.yPos, this.width, this.height);
       // ctx2.fillStyle = "red";
       // ctx2.fillRect(this.xPos, this.yPos, this.width, this.height);
       ctx2.drawImage(this.image, this.xPos, this.yPos, this.height, this.width);
@@ -72,9 +72,9 @@ export default class Player {
       console.log("row", this.row);
       this.direction = 1;
       this.row = this.row - 1;
-      this.yPos = this.yPos - 50;
+      this.yPos = this.yPos - 30;
       ctx2.fillStyle = "lightgray";
-      ctx2.fillRect(this.xPos, this.yPos + 50, this.width, this.height);
+      ctx2.fillRect(this.xPos, this.yPos + 30, this.width, this.height);
       // ctx2.fillStyle = "red";
       // ctx2.fillRect(this.xPos, this.yPos, this.width, this.height);
       ctx2.drawImage(this.image, this.xPos, this.yPos, this.height, this.width);
@@ -88,10 +88,10 @@ export default class Player {
       ctx2.clearRect(this.xPos, this.yPos, this.width, this.height);
       this.direction = 2;
       this.row = this.row + 1;
-      this.yPos = this.yPos + 50;
+      this.yPos = this.yPos + 30;
       console.log(this.yPos);
       ctx2.fillStyle = "lightgray";
-      ctx2.fillRect(this.xPos, this.yPos - 50, this.width, this.height);
+      ctx2.fillRect(this.xPos, this.yPos - 30, this.width, this.height);
       // ctx2.fillStyle = "red";
       // ctx2.fillRect(this.xPos, this.yPos, this.width, this.height);
       ctx2.drawImage(this.image, this.xPos, this.yPos, this.height, this.width);
@@ -131,26 +131,26 @@ export default class Player {
   //                 console.log("row", this.row)
   //                 this.direction = 1
   //                 this.row = this.row -1
-  //                 this.yPos = this.yPos -50
+  //                 this.yPos = this.yPos -30
   //             }
   //         case 'down':
   //             if (this.row < 14 && this.map.array[this.row + 1][this.column] != 1) {
   //                 this.direction = 2
   //                 this.row = this.row + 1
-  //                 this.yPos = this.yPos + 50
+  //                 this.yPos = this.yPos + 30
   //             }
   //         case 'left':
   //             alert("LEFT MOFO")
   //             if (this.column > 0 && this.map.array[this.row][this.column - 1] != 1) {
   //                 this.direction = 3
   //                 this.column = this.column - 1
-  //                 this.xPos = this.xPos - 50
+  //                 this.xPos = this.xPos - 30
   //             }
   //         case 'right':
   //             if (this.column < 14 && this.map.array[this.row][this.column + 1] != 1) {
   //                 this.direction = 4
   //                 this.column =this.column + 1
-  //                 this.xPos = this.xPos + 50
+  //                 this.xPos = this.xPos + 30
   //             }
 
   //     }
