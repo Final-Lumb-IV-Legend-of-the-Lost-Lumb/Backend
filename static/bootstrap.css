@@ -51,7 +51,10 @@ nav {
 }
 
 .game{
-  height: 70vh;
+  /* height: 70vh; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .game img {
@@ -2744,6 +2747,7 @@ textarea.form-control.is-invalid {
 
 .btn {
   display: inline-block;
+  margin: 0;
   font-weight: 400;
   color: #212529;
   text-align: center;
