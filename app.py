@@ -66,7 +66,8 @@ def lobby():
 @app.route('/api/game', methods=['GET'])
 @jwt_required
 def game():
-    return render_template('game.html')
+    username = get_jwt_identity()
+    return render_template('game.html', username=username)
 
 @app.route('/api/inventory', methods=['GET'])
 @jwt_required
