@@ -69,11 +69,6 @@
 </section>
 
   <script>
-    // function logout() {
-    //   fetch('/logout', {
-    //     method: 'post'
-    //   })
-    // }
   
     function addItem(e) {
         if (e.which == 13 || e.keyCode == 13) {
@@ -91,12 +86,14 @@
         }
     }
 
+    let time = moment().format("h:mm:ss a")
+
     function appendToList(data) {
       // console.log(user);
         let html = `
             <li class="tiger-line" id="${data.id}">
                 <div class="view">
-                    <label>moment().format("h:mm:ss a")-${data.value}</label>
+                    <label>{time}-${data.value}</label>
                 </div>
             </li>`;
         let list = document.querySelector(".tiger-chat-line")
