@@ -63,7 +63,7 @@ def lobby():
     username = get_jwt_identity()
     return render_template('lobby.html', username = username)
 
-@app.route('/game')
+@app.route('/api/game', methods=['GET'])
 @jwt_required
 def game():
     return render_template('game.html')
@@ -86,8 +86,7 @@ def login():
 
         registered_user = Users.query.filter_by(username=username).first()
 
-        # Possibly use .decode('utf-8')
-        if not registered_user or not bc.check_password_hash( registered_user.password, password):
+        if not registered_user or not bc.check_password_hash(registered_user.password, password):
             flash('Invalid username and/or password.')
             return redirect(url_for('login'))
 
