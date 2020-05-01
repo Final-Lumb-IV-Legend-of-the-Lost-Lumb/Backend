@@ -7,15 +7,11 @@ class Users(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique = True, nullable = False)
-    password = db.Column(db.String(), nullable = False)
-    
-    money = db.Column(db.Integer())
-    
+    password = db.Column(db.String(), nullable = False)    
 
     def __init__(self, username, password, money):
         self.username = username
         self.password = password
-        self.money = money
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -76,9 +72,12 @@ class PlayerInventory(db.Model):
     
     quantity = db.Column(db.Integer(), nullable = False)
     
-    def __init__(self, quantity):
+    money = db.Column(db.Integer())
+    
+    def __init__(self, quantity, money):
         self.quantity = quantity
         self.item_name = item_name
+        self.money = money
 
 # class RoomInventory(db.Model):
 #     __tablename__ = 'room_inventory'
