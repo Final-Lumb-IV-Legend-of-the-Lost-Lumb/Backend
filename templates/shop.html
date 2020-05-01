@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../static/bootstrap.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+    <title>Tiger King</title>
+</head>
+<body>
+    
+    <nav class="d-flex justify-content-between align-items-center">
+        <span class="title m-3"><h2 class="navtext">The Tiger King Chronicle</h2></span>
+        <span><div class="btn btn-secondary mr-5"><h3>Logout</h3></div></span>
+    </nav>
+​
+    <section class="shop-page container">
+        <h3 class="navtext text-center">Medium Cat Rescue Store</h3>
+​
+        <div class="item-list">            
+            <div class="d-flex justify-content-between m-3">
+                <span id='tiger'></span>
+                <span class="badge badge-danger">500,000</span>
+                <button name='tiger' onclick={buyItem} class="btn btn-success m-3 px-5"><h4>BUY</h4></button>
+            </div>
+            <div class="d-flex justify-content-between m-3">
+                <span id='lion'></span>
+                <span name='lion' class="badge badge-danger">500,000</span>
+                <button onclick={buyItem} class="btn btn-success m-3 px-5"><h4>BUY</h4></button>
+            </div>
+            <div class="d-flex justify-content-between m-3">
+                <span id='sugar'></span>
+                <span class="badge badge-danger">500</span>
+                <button name='sugar' onclick={buyItem} class="btn btn-success m-3 px-5"><h4>BUY</h4></button>
+            </div>
+            <div class="balance d-flex justify-content-between m-3">
+                <span>Your Balance</span>
+                <span class="badge badge-secondary px-5">500,000</span>
+            </div>
+        </div>
+​
+    </section>
+    <script>
+        function buyItem(e){
+​           fetch('/api/buy', {
+                method: 'post',
+                body: JSON.stringify({
+                    item: e.target.name
+                })
+            }).then(() => {
+                console.log('item purchased.')
+            })
+        }
+
+        function getItems() {
+            fetch('/api/shop', {
+                method='get'
+            })
+            .then(response => {
+                response.data.map(element => {
+                    let item = document.querySelector(`#${element}`)
+                    item.innerHTML = element
+                })
+            })
+        }
+    </script>
+​
+    <!--Bootstrap Jquery and popper -->
+    <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> -->
+    <!-- end of it -->
+</body>

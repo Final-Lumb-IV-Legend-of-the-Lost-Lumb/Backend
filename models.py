@@ -72,7 +72,7 @@ class PlayerInventory(db.Model):
     
     quantity = db.Column(db.Integer(), nullable = False)
     
-    money = db.Column(db.Integer())
+    money = db.Column(db.Integer(), server_default=500000)
     
     def __init__(self, quantity, money):
         self.quantity = quantity

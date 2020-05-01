@@ -76,32 +76,30 @@ def inventory():
     items = PlayerInventory.query.filter_by(user_id=user.id)
     return items
 
-@app.route('/api/shop', methods=['GET', 'POST'])
+@app.route('/api/shop', methods=['GET'])
 @jwt_required
 def shop():
-    if request.method == 'GET':
-        return render_template('shop.html')
-    else:
-        db_items = Items.query.all()
+    db_items = Items.query.all()
 
-        all_items = [x.item_name for x in db_items]
+    all_items = [x.item_name for x in db_items]
 
-        return render_template('shop.html', items=all_items)
+    return all_items
 
 
 @app.route('/api/buy', methods=['POST'])
 @jwt_required
-def buy(item):
+def buy():
+    item = json.loads(request.data)
     username = session['username']
     user = Users.query.filter_by(username=username).first()
     player_item = PlayerInventory.query.filter_by(item_name=item)
     if not player_item:
         if item == 'tiger' or item == 'lion':
-            add_item=Items('1', username.id, item, 1, 500000)
+            add_item=Items(1, username.id, item, 1, 500000)
             db_session.add(add_item)
             db_session.commit()
         elif item == 'sugar':
-            add_item=Items(1, username.id, item, 1, 500)
+            add_item=Items(2, username.id, item, 1, 500)
             db_session.add(add_item)
             db_session.commit()
     else:
