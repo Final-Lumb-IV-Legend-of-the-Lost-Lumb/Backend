@@ -68,9 +68,9 @@ class PlayerInventory(db.Model):
 
     id = db.Column(db.Integer, primary_key = True)
 
-    item_id = db.Column(db.String(120), db.ForeignKey('items.id'), unique=True, nullable=False)
+    item_id = db.Column(db.Integer(), db.ForeignKey('items.id'), unique=True, nullable=False)
     
-    user_id = db.Column(db.String(120), db.ForeignKey('users.id'), unique=True, nullable=False)
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id'), unique=True, nullable=False)
     
     item_name = db.Column(db.String(120), unique = True, nullable=False)
     
