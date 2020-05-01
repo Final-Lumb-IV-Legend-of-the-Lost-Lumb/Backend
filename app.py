@@ -1,5 +1,6 @@
 import os
 import json
+from flask_cors import CORS
 from pusher import Pusher
 from flask import Flask, render_template, session, redirect, url_for, flash, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
@@ -14,6 +15,7 @@ Session.configure(bind=engine)
 db_session = Session()
 
 app = Flask(__name__)
+CORS(app)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
@@ -36,6 +38,10 @@ pusher = Pusher(
     ssl=True
 )
 
+'''
+currency spending, buy item, logout.
+'''
+
 from models import Users, RevokedTokenModel
 
 @jwt.token_in_blacklist_loader
@@ -46,7 +52,6 @@ def check_if_token_in_blacklist(decrypted_token):
 @app.route('/')
 def home():
     return render_template('home.html')
-
 
 @app.route('/about')
 def about():
@@ -185,7 +190,6 @@ def register():
             return resp
         except:
             return jsonify({'message': 'Something went wrong'}), 500
-    
     else:
         return render_template('register.html')
 
