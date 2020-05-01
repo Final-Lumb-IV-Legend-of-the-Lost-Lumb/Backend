@@ -159,7 +159,7 @@ def logout():
 
     # forget any user_id
     session.clear()
-    resp = make_response(redirect(url_for('/')))
+    resp = make_response(redirect(url_for('home')))
 
     jti = get_raw_jwt()['jti']
     try:
