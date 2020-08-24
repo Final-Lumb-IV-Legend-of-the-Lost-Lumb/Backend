@@ -1,53 +1,77 @@
-<!DOCTYPE html>
-
-{% block title %} Register {% endblock %} {% block heading %} Register for an
-account. {% if error %}
-<p>
-  <strong>Error:</strong> {{ error }} {% endif %} {% endblock %} {% block body
-  %}
-</p>
-
+{% extends 'layout.html' %} {% block title %}<title>Register</title> {% endblock
+%} {% block heading %} Register for an account. {% if error %}
+<p><strong>Error:</strong> {{ error }} {% endif %} {% endblock %} %}</p>
+{% block body %}
+<nav class="d-flex justify-content-between align-items-center">
+  <span class="title m-3"
+    ><h2 class="navtext">The Tiger King Chronicles</h2></span
+  >
+  <span
+    ><button class="btn btn-secondary mr-5" href="about">
+      <h3>About</h3>
+    </button></span
+  >
+</nav>
 <div class="ltPan">
   <img
     class="tigerImg"
-    src="/static/images/tiger-4258214_640 1.png"
+    src="../static/images/tiger-4258214_6401.png"
     alt="tiger image"
   />
   <h1 class="text">The Tiger King Chronicles</h1>
 </div>
 <div class="rtPan">
   <form class="login" action="{{ url_for('register') }}" method="post">
-    <fieldset>
-      <div class="form-group">
-        <input
-          autocomplete="off"
-          autofocus
-          class="form-control"
-          name="username"
-          placeholder="Username"
-          type="text"
-        />
-      </div>
-      <div class="form-group">
-        <input
-          class="form-control"
-          name="password"
-          placeholder="Password"
-          type="password"
-        />
-      </div>
-      <div class="form-group">
-        <input
-          class="form-control"
-          name="password2"
-          placeholder="Password Again"
-          type="password"
-        />
-      </div>
-      <div class="form-group">
-        <button class="btn btn-default" type="submit">Register</button>
-      </div>
-    </fieldset>
+    <div class="form-group">
+      <label class="labels">Username</label>
+      <input
+        autocomplete="off"
+        autofocus
+        class="form-control"
+        name="username"
+        placeholder="Username"
+        type="text"
+      />
+    </div>
+    <div class="form-group">
+      <label class="labels">Password</label>
+      <input
+        class="form-control"
+        name="password"
+        placeholder="Password"
+        type="password"
+      />
+    </div>
+    <div class="form-group">
+      <label class="labels">Password Again</label>
+      <input
+        class="form-control"
+        name="password2"
+        placeholder="Password Again"
+        type="password"
+      />
+    </div>
+    <div>
+      <button class="login-btn" type="submit" onclick="addItem()">
+        Register
+      </button>
+    </div>
   </form>
 </div>
+<script>
+  function addItem(e) {
+    if (e.which == 13 || e.keyCode == 13) {
+      let item = document.querySelector(".new-todo");
+      fetch("/add-item", {
+        method: "post",
+        body: JSON.stringify({
+          id: `item-${Date.now()}`,
+          value: item.value,
+        }),
+      }).then((response) => {
+        item.value = "";
+      });
+    }
+  }
+</script>
 {% endblock %}
